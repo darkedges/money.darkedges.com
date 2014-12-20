@@ -1,22 +1,11 @@
 <div class="container">
+    <h1>User Details</h1>
     <div class="row">
-        Savings Goal: $
-        <input type="text" ng-model="sliders.goal">
-        </BR>
-        <slider ng-model="sliders.goal" value="67043" tooltip="hide" min="1" step="1" max="100000" value="1"></slider>
+        <div class="col-md-2">
+            <tabs data="tabData" type="tabs" />
+        </div>
     </div>
-    <div class="row">
-        Savings: $
-        <input type="text" ng-model="sliders.spm">per month</BR>
-        <slider ng-model="sliders.spm" value="2106" tooltip="hide" min="1" step="1" max="5000" value="1"></slider>
-    </div>
-    <div class="row">
-        Interest:
-        <input type="text" ng-model="sliders.ir">%</BR>
-        <slider ng-model="sliders.ir" value="5" tooltip="hide" min="0.01" step="0.01" max="5" value="1"></slider>
-    </div>
-    <div class="row">
-        To reach your savings goal it will take:</BR>
-        <howlong goal="sliders.goal" spm="sliders.spm" ir="sliders.ir" />
+    <div class="col-md-10">
+        <div ui-view autoscroll></div>
     </div>
 </div>
