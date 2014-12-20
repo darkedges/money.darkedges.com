@@ -10,27 +10,16 @@
  */
 angular
     .module('moneydarkedgescomApp', [
-    'ngAnimate',
-    'ngCookies',
-    'ngResource',
-    'ngRoute',
-    'ngSanitize',
-    'ngTouch',
     'ui.bootstrap-slider',
-     'angular-momentjs'
+    'angular-momentjs',
+    'ui.router'
   ])
-    .config(function ($routeProvider) {
-
-        $routeProvider
-            .when('/', {
-                templateUrl: 'views/main.html',
+    .config(function ($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.otherwise("/");
+        $stateProvider
+            .state('default', {
+                url: "/",
+                templateUrl: "views/main.html",
                 controller: 'MainCtrl'
-            })
-            .when('/about', {
-                templateUrl: 'views/about.html',
-                controller: 'AboutCtrl'
-            })
-            .otherwise({
-                redirectTo: '/'
             });
     });
