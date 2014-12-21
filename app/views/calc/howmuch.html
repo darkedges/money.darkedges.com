@@ -1,8 +1,9 @@
 <form>
-    <div scope-age></div>
     <div class="container">
         <div class="row">
             <h1>How Much?</h1>
+        </div>
+        <div class="row">
             <div class="row">
                 Savings: $
                 <input type="text" ng-model="sliders.spm">per month</BR>
@@ -18,7 +19,7 @@
             <div class="row">
                 Interest:
                 <input type="text" ng-model="sliders.ir">%</BR>
-                <slider ng-model="sliders.ir" value="5" tooltip="hide" min="0.01" step="0.01" max="5" value="1"></slider>
+                <slider ng-model="sliders.ir" value="2.5" tooltip="hide" min="0.01" step="0.01" max="5" value="1"></slider>
             </div>
             <div class="row">
                 Your savings goal could be:</BR>

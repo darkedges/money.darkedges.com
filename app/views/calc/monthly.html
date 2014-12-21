@@ -1,10 +1,12 @@
 <div class="container">
-     <div scope-age></div>
     <div class="row">
         <h1>Monthly Contributions?</h1>
+    </div>
+    <div class="row">
         <div class="row">
             Savings Goal: $
-            <input type="text" ng-model="sliders.goal"></BR>
+            <input type="text" ng-model="sliders.goal">
+            </BR>
             <slider ng-model="$parent.sliders.goal" value="5000" tooltip="hide" min="1" step="1" max="5000" value="1"></slider>
         </div>
         <div class="row">
