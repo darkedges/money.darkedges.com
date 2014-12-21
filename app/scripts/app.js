@@ -10,11 +10,11 @@
  */
 angular
     .module('moneydarkedgescomApp', [
-    'ui.bootstrap-slider',
-    'angular-momentjs',
     'ui.router',
     'ui.bootstrap',
-    'ui.router.tabs'
+    'ui.router.tabs',
+    'ui.bootstrap-slider',
+    'angular-momentjs'
   ])
     .config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/");
@@ -23,11 +23,14 @@ angular
                 url: "/",
                 templateUrl: "views/main.html",
                 controller: 'MainCtrl'
-            }).state('calc.goal', {
-                url: 'calc/goal',
-                templateUrl: 'views/calc/goal.html'
-            }).state('calc.time', {
-                url: 'calc/time',
-                templateUrl: 'views/calc/time.html'
+            }).state('calc.howlong', {
+                url: 'calc/howlong',
+                templateUrl: 'views/calc/howlong.html'
+            }).state('calc.howmuch', {
+                url: 'calc/howmuch',
+                templateUrl: 'views/calc/howmuch.html'
+            }).state('calc.monthly', {
+                url: 'calc/monthly',
+                templateUrl: 'views/calc/monthly.html'
             });
     });

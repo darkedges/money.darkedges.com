@@ -11,12 +11,16 @@ angular.module('moneydarkedgescomApp')
     .controller('MainCtrl', function ($scope) {
         $scope.tabData = [
             {
-                heading: 'Saving Goal',
-                route: 'calc.goal'
+                heading: 'How much can i save?',
+                route: 'calc.howmuch'
             },
             {
-                heading: 'Time',
-                route: 'calc.time'
-            }
+                heading: 'How long will it take?',
+                route: 'calc.howlong'
+            },
+                        {
+                heading: 'Monthly contributions',
+                route: 'calc.monthly'
+            },
     ];
     });
