@@ -1,0 +1,74 @@
+'use strict';
+
+/**
+ * @ngdoc directive
+ * @name moneydarkedgescomApp.directive:monthly
+ * @description
+ * # monthly
+ */
+angular.module("moneydarkedgescomApp").factory("isnan", [
+
+        function () {
+        return function (val) {
+            return val = parseInt(val), isNaN(val) ? 0 : val
+        }
+        }
+]);
+
+angular.module('moneydarkedgescomApp')
+    .directive('maxValue', ["isnan",
+        function (isnan, $moment) {
+            return {
+                scope: {
+                    maxValue: "=",
+                    ngModel: "=",
+                },
+                restrict: 'A',
+                link: function ($scope, $element) {
+                    $element.keydown(function (e) {
+                        -1 !== $.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) || 65 == e.keyCode && e.ctrlKey === !0 || e.keyCode >= 35 && e.keyCode <= 39 || (e.shiftKey || e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105) && e.preventDefault()
+                    })
+                },
+                controller: function ($scope) {
+                    $scope.$watch("ngModel", function (newValue, oldValue) {
+                        var ngModel = isnan($scope.ngModel),
+                            maxValue = isnan($scope.maxValue);
+                        if (ngModel > maxValue) {
+                            $scope.ngModel = maxValue;
+                        }
+                    })
+                }
+            };
+    }]);
+
+angular.module('moneydarkedgescomApp')
+    .directive('yearmonthconverter', ["isnan",
+        function (isnan, $moment) {
+            var $counter = 0;
+            return {
+                scope: {
+                    years: '=',
+                    months: '=',
+                    sliderModel: '='
+                },
+                restrict: 'E',
+                link: function ($scope) {
+                    $scope.$watchGroup(['years', 'months'], function (newValues, oldValues, scope) {
+                        var curYears = isnan(newValues[0]),
+                            curMonths = isnan(newValues[1]),
+                            preYears = isnan(oldValues[0]),
+                            preMonths = isnan(oldValues[1]);
+
+                        if ((curYears != preYears) || (curMonths != preMonths)) {
+                            $scope.sliderModel = (curYears * 12) + (curMonths);
+                        }
+                    });
+                    $scope.$watch("sliderModel", function (newValue, oldValue) {
+                        var totalDuration = moment.duration(newValue, 'months');
+                        $scope.years = totalDuration.years();
+                        $scope.months = totalDuration.months();
+                        $counter++;
+                    });
+                }
+            };
+    }]);

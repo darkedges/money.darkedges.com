@@ -32,5 +32,9 @@ angular
             }).state('calc.monthly', {
                 url: 'calc/monthly',
                 templateUrl: 'views/calc/monthly.html'
+            }).state('test', {
+                url: "/test",
+                templateUrl: "views/test.html",
+                controller: 'MainCtrl'
             });
     });
