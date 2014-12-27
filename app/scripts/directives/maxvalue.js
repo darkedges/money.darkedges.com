@@ -1,36 +1,75 @@
 'use strict';
 
-angular.module('moneydarkedgescomApp')
-    .directive('yearslider', function ($moment, $compile) {
-        return {
-            scope: {
-                maxYears: '=',
-                ngModel: '='
-            },
-            restrict: 'E',
-            template: '<div ng-transclude></div>',
-            replace: true,
-            transclude: true,
-            require: 'ngModel',
-            link: function (scope, element, attrs, ngModelCtrl) {
-                element.append('<slider ng-model="$parent.sliders.term.months" value="24" tooltip="hide" min="1" step="1" max="120" value="1"></slider>');
-                $compile(element.contents())(scope)
+angular.module("moneydarkedgescomApp").factory("isnan", [
 
-                scope.$watch("sliders.term.months", function (newValue, oldValue) {
-                    var totalDuration = moment.duration(newValue, 'months');
+        function () {
+        return function (val) {
+            return val = parseInt(val), isNaN(val) ? 0 : val
+        }
+        }
+]);
+
+angular.module('moneydarkedgescomApp')
+    .directive('yearslider',
+        function ($moment, $compile, isnan) {
+            return {
+                scope: {
+                    maxYears: '=',
+                    ngModel: '='
+                },
+                restrict: 'E',
+                template: '<div ng-transclude></div>',
+                replace: true,
+                transclude: true,
+                require: 'ngModel',
+                link: function (scope, element, attrs, ngModelCtrl) {
+                    var totalDuration = moment.duration(24, 'months');
                     ngModelCtrl.$setViewValue({
                         years: totalDuration.years(),
                         months: totalDuration.months()
                     });
-                });
-            },
-            controller: function ($scope) {
-                this.getMaxYears = function () {
-                    return $scope.maxYears;
+                    element.append('<slider ng-model="$parent.sliders.term.months" value="24" tooltip="hide" min="1" step="1" max="120" value="1"></slider>');
+                    $compile(element.contents())(scope)
+
+                    scope.$watch('ngModel.years', function (newValue, oldValue) {
+                        var ngModel = isnan(newValue),
+                            maxValue = isnan(scope.maxYears),
+                            years = angular.isUndefined(scope.ngModel) ? 0 : isnan(scope.ngModel.years),
+                            months = angular.isUndefined(scope.ngModel) ? 0 : isnan(scope.ngModel.months);
+                        if (ngModel >= maxValue) {
+                            scope.ngModel.years = maxValue;
+                            scope.ngModel.months = 0;
+                        }
+                        console.log(scope);
+                       // scope.sliders.term.months = (years * 12) + (months);
+                       // console.log(scope['sliders.term.months']);
+                    });
+
+                    scope.$watch('ngModel.months', function (newValue, oldValue) {
+                        var ngModel = isnan(newValue),
+                            maxYears = isnan(scope.maxYears),
+                            years = angular.isUndefined(scope.ngModel) ? 0 : isnan(scope.ngModel.years),
+                            months = angular.isUndefined(scope.ngModel) ? 0 : isnan(scope.ngModel.months);
+                        if (ngModel > 11) {
+                            if (years == maxYears) {
+                                scope.ngModel.months = 0;
+                            } else {
+                                scope.ngModel.months = 11;
+                            }
+                        }
+                        //scope.sliders.term.months = (years * 12) + (months);
+                    });
+
+                    scope.$watch("sliders.term.months", function (newValue, oldValue) {
+                        var totalDuration = moment.duration(newValue, 'months');
+                        ngModelCtrl.$setViewValue({
+                            years: totalDuration.years(),
+                            months: totalDuration.months()
+                        });
+                    });
                 }
             }
-        }
-    })
+        });
 
 angular.module('moneydarkedgescomApp')
     .directive('years', function ($moment, $compile) {
@@ -46,7 +85,6 @@ angular.module('moneydarkedgescomApp')
                 });
             },
             compile: function (element, attrs) {
-                 console.log(element);
                 // Taken from https://groups.google.com/forum/#!searchin/angular/ng-model/angular/mkhW57FC0xE/Cn-y_WFvJhUJ
                 element.attr('ng-model', 'ngModel.years');
                 var resumeCompilation = $compile(element, null, 9999);
@@ -73,7 +111,6 @@ angular.module('moneydarkedgescomApp')
                 });
             },
             compile: function (element, attrs) {
-                 console.log(element);
                 // Taken from https://groups.google.com/forum/#!searchin/angular/ng-model/angular/mkhW57FC0xE/Cn-y_WFvJhUJ
                 element.attr('ng-model', 'ngModel.months');
                 var resumeCompilation = $compile(element, null, 9999);
