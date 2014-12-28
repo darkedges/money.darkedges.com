@@ -2,10 +2,9 @@
     <div class="container">
         <h1>Test</h1>
         <div class="row">
-            {{terms.years}}:{{terms.months}}:{{$parent.sliders.term.months}}
-            <yearslider ng-model="terms" max-years="10">
+            <yearslider ng-model="terms" max-years="10" value="36" stooltip="hide" minvalue="1" maxvalue="120">
                 <years />years
-                <months />months {{terms.years}}:{{terms.months}}:{{$parent.sliders.term.months}}
+                <months />months
                 <br/>
             </yearslider>
         </div>

@@ -23,12 +23,18 @@ angular.module('moneydarkedgescomApp')
                 transclude: true,
                 require: 'ngModel',
                 link: function (scope, element, attrs, ngModelCtrl) {
-                    var totalDuration = moment.duration(24, 'months');
+                    var totalDuration = moment.duration(isnan(attrs.value), 'months');
                     ngModelCtrl.$setViewValue({
                         years: totalDuration.years(),
-                        months: totalDuration.months()
+                        months: totalDuration.months(),
+                        slider: isnan(attrs.value)
                     });
-                    element.append('<slider ng-model="$parent.sliders.term.months" value="24" tooltip="hide" min="1" step="1" max="120" value="1"></slider>');
+                    var slider = angular.element('<slider ng-model="$parent.ngModel.slider" />');
+                    if (attrs.value) slider.attr('value', attrs.value);
+                    if (attrs.maxvalue) slider.attr('max', attrs.maxvalue);
+                    if (attrs.minvalue) slider.attr('min', attrs.minvalue);
+                    if (attrs.stooltip) slider.attr('tooltip', attrs.stooltip);
+                    element.append(slider);
                     $compile(element.contents())(scope)
 
                     scope.$watch('ngModel.years', function (newValue, oldValue) {
@@ -40,9 +46,7 @@ angular.module('moneydarkedgescomApp')
                             scope.ngModel.years = maxValue;
                             scope.ngModel.months = 0;
                         }
-                        console.log(scope);
-                       // scope.sliders.term.months = (years * 12) + (months);
-                       // console.log(scope['sliders.term.months']);
+                        scope.ngModel.slider = (years * 12) + (months);
                     });
 
                     scope.$watch('ngModel.months', function (newValue, oldValue) {
@@ -50,21 +54,21 @@ angular.module('moneydarkedgescomApp')
                             maxYears = isnan(scope.maxYears),
                             years = angular.isUndefined(scope.ngModel) ? 0 : isnan(scope.ngModel.years),
                             months = angular.isUndefined(scope.ngModel) ? 0 : isnan(scope.ngModel.months);
-                        if (ngModel > 11) {
-                            if (years == maxYears) {
-                                scope.ngModel.months = 0;
-                            } else {
-                                scope.ngModel.months = 11;
-                            }
+                        if (years == maxYears) {
+                            months = 0;
+                        } else if (ngModel > 11) {
+                            months = 11;
                         }
-                        //scope.sliders.term.months = (years * 12) + (months);
+                        scope.ngModel.months = months;
+                        scope.ngModel.slider = (years * 12) + months;
                     });
 
-                    scope.$watch("sliders.term.months", function (newValue, oldValue) {
+                    scope.$watch("ngModel.slider", function (newValue, oldValue) {
                         var totalDuration = moment.duration(newValue, 'months');
                         ngModelCtrl.$setViewValue({
                             years: totalDuration.years(),
-                            months: totalDuration.months()
+                            months: totalDuration.months(),
+                            slider: newValue
                         });
                     });
                 }
